@@ -51,7 +51,7 @@ all: set_FREE_RTOS_v2.elf secondary-outputs
 
 # Tool invocations
 set_FREE_RTOS_v2.elf: $(OBJS) $(USER_OBJS) F:\STUDIA\semestr_mgr_I\Sensory\Kod\set_FREE_RTOS_v2\STM32L4R5ZITX_FLASH.ld
-	arm-none-eabi-gcc -o "set_FREE_RTOS_v2.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"F:\STUDIA\semestr_mgr_I\Sensory\Kod\set_FREE_RTOS_v2\STM32L4R5ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="set_FREE_RTOS_v2.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+	arm-none-eabi-gcc -o "set_FREE_RTOS_v2.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"F:\STUDIA\semestr_mgr_I\Sensory\Kod\set_FREE_RTOS_v2\STM32L4R5ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="set_FREE_RTOS_v2.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

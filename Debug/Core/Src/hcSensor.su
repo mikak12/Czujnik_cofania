@@ -1,0 +1,2 @@
+hcSensor.c:16:6:usDelay	16	static
+hcSensor.c:27:7:measureDistance	32	static

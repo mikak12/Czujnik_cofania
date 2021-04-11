@@ -13,42 +13,43 @@
 /* Includes ------------------------------------------------------------------*/
 #include "hcSensor.h"
 
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
+void usDelay(uint32_t uSec)
+{
+	if(uSec < 2) uSec = 2;
+	usTIM->ARR = uSec - 1;
+	usTIM->EGR = 1;
+	usTIM->SR %= ~1;
+	usTIM->CR1 |= 1;
+	while((usTIM->SR&0x0001) != 1);
+	usTIM->SR &= ~(0x0001);
+}
 
-/* USER CODE END Includes */
+float measureDistance()
+{
+	uint32_t numTics = 0;
+	const float speedSound = 0.0343/2;
+	float distance = 0;
 
-/* Private typedef -----------------------------------------------------------*/
-/* USER CODE BEGIN PTD */
 
-/* USER CODE END PTD */
+	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_3, GPIO_PIN_RESET);
+	usDelay(3);
 
-/* Private define ------------------------------------------------------------*/
-/* USER CODE BEGIN PD */
-/* USER CODE END PD */
+	//TRIG
+	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_3, GPIO_PIN_SET);
+	usDelay(10);
+	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_3, GPIO_PIN_RESET);
 
-/* Private macro -------------------------------------------------------------*/
-/* USER CODE BEGIN PM */
+	//START MEASURE
+	while(HAL_GPIO_ReadPin(GPIOF, GPIO_PIN_5)==GPIO_PIN_SET)
+	{
+		numTics++;
+		usDelay(2);
+	};
 
-/* USER CODE END PM */
+	distance = (numTics + 0.0f)*2.8*speedSound;
 
-/* Private variables ---------------------------------------------------------*/
-
-/* USER CODE BEGIN PV */
-
-/* USER CODE END PV */
-
-/* Private function prototypes -----------------------------------------------*/
-
-/* USER CODE BEGIN PFP */
-
-/* USER CODE END PFP */
-
-/* Private user code ---------------------------------------------------------*/
-/* USER CODE BEGIN 0 */
-
-/* USER CODE END 0 */
-
+  return distance;
+}
 
 
 /************************ (C) COPYRIGHT *****END OF FILE****/
